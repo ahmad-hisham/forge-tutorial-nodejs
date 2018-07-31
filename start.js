@@ -11,4 +11,8 @@ app.set("view engine", "ejs");
 var indexRouter = require("./routes/index");
 app.use("/", indexRouter);
 
+// OAuth route
+var authRouter = require("./routes/oauth");
+app.use("/oauth", authRouter);
+
 app.listen(3000);
