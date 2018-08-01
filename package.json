@@ -1,13 +1,13 @@
 {
   "name": "forge-lab",
   "version": "1.0.0",
-  "description": "",
+  "description": "Playground to learn and use Autodesk Forge platform and Node.js",
   "main": "start.js",
   "scripts": {
     "start": "node start.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Ahmad Khairat",
   "license": "ISC",
   "dependencies": {
     "ejs": "^2.6.1",
