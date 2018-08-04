@@ -7,6 +7,9 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+// enable static http serving
+app.use(express.static(path.join(__dirname, "public")));
+
 // Root route
 var indexRouter = require("./routes/index");
 app.use("/", indexRouter);
