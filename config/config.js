@@ -11,5 +11,11 @@ module.exports = {
     internal: ["bucket:create", "bucket:read", "data:read", "data:create", "data:write"],
     // Required scope of the token sent to the client
     public: ["viewables:read"]
+  },
+
+  sample: {
+    bucket_key: "-upload-sample",
+    file_path: "sample",
+    file_name: "sample.dwg"
   }
 };
