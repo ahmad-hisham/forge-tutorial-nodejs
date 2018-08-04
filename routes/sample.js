@@ -39,4 +39,22 @@ router.post("/object_translate", async function (req, res) {
   }
 });
 
+router.get("/object_translated", async function (req, res) {
+  var bucketKey = config.credentials.client_id.toLowerCase() + config.sample.bucket_key;
+  var fileName = config.sample.file_name;
+  var objectId = "urn:adsk.objects:os.object:" + bucketKey + "/" + fileName;
+
+  for (let i = 0; i < 10; ++i) {
+    try {
+      var data = await modelderivative.getManifest(objectId);
+      if (data.progress == "complete") {
+        res.json({status: "complete"});
+        return;
+      }
+      setTimeout(console.log("Retry " + i), 5000);
+    } catch(err) { /* Silent retry */ }
+  }
+  res.json({status: "failed"});
+});
+
 module.exports = router;

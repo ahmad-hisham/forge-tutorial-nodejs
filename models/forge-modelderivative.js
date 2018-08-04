@@ -19,6 +19,17 @@ module.exports = {
     // post the job
     var data = await derivativesApi.translate(postJob, {}, forgeOAuth, credentials);
     return data.body;
+  },
+
+  getManifest: async function (objectName) {
+    var forgeOAuth = oauth.getCredentials("internal");
+    var derivativesApi = new forgeSDK.DerivativesApi();
+
+    var urn = objectName.toBase64();
+
+    var credentials = await forgeOAuth.authenticate();
+    var data = await derivativesApi.getManifest(urn, {}, forgeOAuth, credentials);
+    return data.body;
   }
 };
 
