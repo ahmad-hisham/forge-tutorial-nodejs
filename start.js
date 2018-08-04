@@ -15,4 +15,8 @@ app.use("/", indexRouter);
 var authRouter = require("./routes/oauth");
 app.use("/oauth", authRouter);
 
+// Upload sample route
+var sampleRouter = require("./routes/sample");
+app.use("/sample", sampleRouter);
+
 app.listen(3000);
