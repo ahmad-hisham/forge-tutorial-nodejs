@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Forge Sample</title>
+
+  <style>
+    body {
+      padding: 20px;
+      font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    a {
+      color: #00B7FF;
+    }
+
+    .step-not-started {
+      color: #CCCCCC;
+    }
+
+    .step-in-progress {
+      color: #00B7FF;
+    }
+
+    .step-complete {
+      color: black;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Forge Sample</h1>
+  <button type="button" id="start" onclick="start_sample()">Start Sample</button>
+  <h4 id="status1" class="step-not-started">Authenticate and login</h4>
+  <h4 id="status2" class="step-not-started">Create Bucket</h4>
+  <h4 id="status3" class="step-not-started">Upload File</h4>
+  <h4 id="status4" class="step-not-started">Translate Object</h4>
+  <h4 id="status5" class="step-not-started">Check Translation Finish</h4>
+  <h4 id="status6" class="step-not-started">Prepare Viewer</h4>
+  <a id="viewer-link" href="viewer.html" hidden>View sample file</a>
+
+  <script>
+    //document.getElementById("start").addEventListener("click", );
+
+    async function start_sample() {
+      // Get all elements
+      var stepStatus1 = document.getElementById("status1");
+      var stepStatus2 = document.getElementById("status2");
+      var stepStatus3 = document.getElementById("status3");
+      var stepStatus4 = document.getElementById("status4");
+      var stepStatus5 = document.getElementById("status5");
+      var stepStatus6 = document.getElementById("status6");
+      var viewerLink = document.getElementById("viewer-link");
+
+      var accessToken;
+      var objectUrn;
+
+      //--- 1
+      stepStatus1.className = "step-in-progress";
+      let res1 = await fetch("/oauth/token");
+      let json1 = await res1.json();
+      accessToken = json1.access_token;
+      console.log(accessToken);
+      stepStatus1.className = "step-complete";
+
+      //--- 2
+      stepStatus2.className = "step-in-progress";
+      let res2 = await fetch("/sample/create_bucket", { method: "POST" });
+      stepStatus2.className = "step-complete";
+
+      //--- 3
+      stepStatus3.className = "step-in-progress";
+      let res3 = await fetch("/sample/upload_object", { method: "POST" });
+      let json3 = await res3.json();
+      console.log(json3);
+      objectUrn = json3.objectId;
+      console.log(objectUrn);
+      stepStatus3.className = "step-complete";
+
+      //--- 4
+      stepStatus4.className = "step-in-progress";
+      let res4 = await fetch("/sample/object_translate", { method: "POST" });
+      stepStatus4.className = "step-complete";
+
+      //--- 5
+      stepStatus5.className = "step-in-progress";
+      let res5 = await fetch("/sample/object_translated");
+      let json5 = await res5.json();
+      if (json5.status != "complete")
+        throw ("Translation failed");
+      stepStatus5.className = "step-complete";
+
+      //--- 6
+      stepStatus6.className = "step-in-progress";
+      let viewerLinkHref = "/viewer.html?token=" + accessToken + "&urn=" + btoa(objectUrn);
+      viewerLink.href = viewerLinkHref;
+      viewerLink.hidden = false;
+      console.log(viewerLinkHref);
+      stepStatus6.className = "step-complete";
+    };
+  </script>
+</body>
+
+</html>
