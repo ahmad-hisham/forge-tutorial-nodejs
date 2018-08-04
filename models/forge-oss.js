@@ -32,5 +32,16 @@ module.exports = {
         return (error);
       }
     }
+  }, 
+
+  uploadObject: async function (bucketKey, fileName, filePath) {
+    var forgeOAuth = oauth.getCredentials("internal");
+    var objectsApi = new forgeSDK.ObjectsApi();
+    var fs = require("fs");
+
+    var credentials = await forgeOAuth.authenticate();
+    var filecontent = await fs.promises.readFile(filePath);
+    var bucketObject = await objectsApi.uploadObject(bucketKey, fileName, filecontent.length, filecontent, {}, forgeOAuth, credentials);
+    return bucketObject.body;
   }
 };
