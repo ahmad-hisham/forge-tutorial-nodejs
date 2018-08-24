@@ -2,20 +2,21 @@ var express = require("express");
 var router = express.Router();
 
 var oss = require("../models/forge-oss");
-var modelderivative = require("../models/forge-modelderivative");
-var config = require("../config/config");
-var path = require("path");
 
 router.get("/buckets", async function (req, res) {
   var buckets = await oss.getBuckets();
   res.json(buckets);
 });
 
+var config = require("../config/config");
+
 router.post("/create_bucket", async function (req, res) {
   var bucketKey = config.credentials.client_id.toLowerCase() + config.sample.bucket_key;
   var bucket = await oss.createBucket(bucketKey);
   res.json(bucket);
 });
+
+var path = require("path");
 
 router.post("/upload_object", async function (req, res) {
   var bucketKey = config.credentials.client_id.toLowerCase() + config.sample.bucket_key;
@@ -25,6 +26,8 @@ router.post("/upload_object", async function (req, res) {
   var bucketObject = await oss.uploadObject(bucketKey, fileName, filePath);
   res.json(bucketObject);
 });
+
+var modelderivative = require("../models/forge-modelderivative");
 
 router.post("/object_translate", async function (req, res) {
   var bucketKey = config.credentials.client_id.toLowerCase() + config.sample.bucket_key;
