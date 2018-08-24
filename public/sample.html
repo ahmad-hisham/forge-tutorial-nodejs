@@ -3,7 +3,6 @@
 
 <head>
   <meta charset="utf-8">
-
   <title>Forge Sample</title>
 
   <style>
@@ -11,19 +10,12 @@
       padding: 20px;
       font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
-
-    a {
-      color: #00B7FF;
-    }
-
     .step-not-started {
       color: #CCCCCC;
     }
-
     .step-in-progress {
       color: #00B7FF;
     }
-
     .step-complete {
       color: black;
     }
@@ -42,8 +34,6 @@
   <a id="viewer-link" href="viewer.html" hidden>View sample file</a>
 
   <script>
-    //document.getElementById("start").addEventListener("click", );
-
     async function start_sample() {
       // Get all elements
       var stepStatus1 = document.getElementById("status1");
@@ -74,7 +64,6 @@
       stepStatus3.className = "step-in-progress";
       let res3 = await fetch("/sample/upload_object", { method: "POST" });
       let json3 = await res3.json();
-      console.log(json3);
       objectUrn = json3.objectId;
       console.log(objectUrn);
       stepStatus3.className = "step-complete";
@@ -102,5 +91,4 @@
     };
   </script>
 </body>
-
 </html>
