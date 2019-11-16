@@ -5,7 +5,7 @@
   <meta charset="utf-8">
 
   <!-- The Viewer CSS -->
-  <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/style.min.css" type="text/css">
+  <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/style.min.css" type="text/css">
 
   <!-- Developer CSS -->
   <style>
@@ -28,7 +28,7 @@
   <div id="MyViewerDiv"></div>
 
   <!-- The Viewer JS -->
-  <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/viewer3D.min.js"></script>
+  <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/6.*/viewer3D.min.js"></script>
 
   <script>
     function getParameterByName(name, url) {
@@ -48,7 +48,8 @@
     var viewer;
     var options = {
       env: 'AutodeskProduction',
-      accessToken: getParameterByName('token')
+      accessToken: getParameterByName('token'),
+      api: 'derivativeV2'    // for models uploaded to EMEA change this option to 'derivativeV2_EU'
     };
     var documentId = 'urn:' + getParameterByName('urn');
     Autodesk.Viewing.Initializer(options, function onInitialized() {
@@ -61,27 +62,33 @@
     */
     function onDocumentLoadSuccess(doc) {
 
-      // A document contains references to 3D and 2D viewables.
-      var viewables = Autodesk.Viewing.Document.getSubItemsWithProperties(doc.getRootItem(), { 'type': 'geometry' }, true);
-      if (viewables.length === 0) {
-        console.error('Document contains no viewables.');
+      // A document contains references to 3D and 2D geometries.
+      var geometries = doc.getRoot().search({'type':'geometry'});
+      if (geometries.length === 0) {
+        console.error('Document contains no geometries.');
         return;
       }
 
-      // Choose any of the avialble viewables
-      var initialViewable = viewables[0];
-      var svfUrl = doc.getViewablePath(initialViewable);
+      // Choose any of the avialable geometries
+      var initGeom = geometries[0];
+      // Create Viewer instance
+      var viewerDiv = document.getElementById('MyViewerDiv');
+      var config = {
+        extensions: initGeom.extensions() || []
+      };
+      viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv, config);
+
+      // Load the chosen geometry
+      var svfUrl = doc.getViewablePath(initGeom);
       var modelOptions = {
         sharedPropertyDbPath: doc.getPropertyDbPath()
       };
 
-      var viewerDiv = document.getElementById('MyViewerDiv');
-      viewer = new Autodesk.Viewing.Private.GuiViewer3D(viewerDiv);
       viewer.start(svfUrl, modelOptions, onLoadModelSuccess, onLoadModelError);
     }
 
     /**
-     * Autodesk.Viewing.Document.load() failuire callback.
+     * Autodesk.Viewing.Document.load() failure callback.
      */
     function onDocumentLoadFailure(viewerErrorCode) {
       console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
