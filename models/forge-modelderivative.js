@@ -13,7 +13,7 @@ module.exports = {
     postJob.input = new forgeSDK.JobPayloadInput();
     postJob.input.urn = objectName.toBase64();
     postJob.output = new forgeSDK.JobPayloadOutput([new forgeSDK.JobSvfOutputPayload()]);
-    postJob.output.formats[0].type = "svf";
+    postJob.output.formats[0].type = "svf2";
     postJob.output.formats[0].views = ["2d", "3d"];
 
     // post the job

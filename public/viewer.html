@@ -47,9 +47,9 @@
   <script>
     var viewer;
     var options = {
-      env: 'AutodeskProduction',
+      env: 'AutodeskProduction2', // For SVF2 loading
       accessToken: getParameterByName('token'),
-      api: 'derivativeV2'    // for models uploaded to EMEA change this option to 'derivativeV2_EU'
+      api: 'streamingV2'    // for models uploaded to EMEA change this option to 'derivativeV2_EU'
     };
 
     Autodesk.Viewing.Initializer(options, function() {
